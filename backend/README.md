@@ -1,4 +1,4 @@
-# Career OS Backend
+# AI CAREER GUIDE SYSTEM
 
 AI-powered Career Operating System — Backend (Node.js + Express + MongoDB + OpenAI)
 
