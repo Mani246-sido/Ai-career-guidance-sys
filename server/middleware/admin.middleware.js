@@ -1,0 +1,11 @@
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
+
+const isAdmin = asyncHandler(async (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    throw new ApiError(403, "Access denied, admin privileges required");
+  }
+  next();
+});
+
+module.exports = { isAdmin };
