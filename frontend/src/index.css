@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ---- Vector — light design tokens ---- */
+  --color-canvas: #FAFBFC;
+  --color-canvas-soft: #F3F5F8;
+  --color-canvas-warm: #F6F4EF;
+  --color-ink: #0F1424;
+  --color-ink-soft: #4A5066;
+  --color-ink-faint: #8B90A3;
+
+  --color-indigo: #5B5FEF;
+  --color-indigo-soft: #EEF0FE;
+  --color-indigo-deep: #3E3FC4;
+
+  --color-gold: #E8B94E;
+  --color-gold-soft: #FBF2DE;
+
+  --color-mint: #12B5A6;
+  --color-mint-soft: #E4F8F6;
+
+  --color-sky: #A5D8FF;
+  --color-sky-soft: #EFF7FF;
+
+  --color-line: #E6E8EE;
+
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-canvas);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-indigo);
+  color: white;
+}
+
+/* thin, light scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* utility classes reused across components */
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(15, 20, 36, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(230, 232, 238, 0.9);
+  box-shadow: 0 12px 40px rgba(15, 20, 36, 0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, #5B5FEF 0%, #3E3FC4 60%, #A5D8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
