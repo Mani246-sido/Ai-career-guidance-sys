@@ -1,4 +1,4 @@
-# Career OS Backend
+# AI CAREER GUIDE SYSTEM
 
 AI-powered Career Operating System — Backend (Node.js + Express + MongoDB + OpenAI)
 
@@ -25,24 +25,6 @@ AI-powered Career Operating System — Backend (Node.js + Express + MongoDB + Op
 
 ---
 
-## 2. Installation
-
-```bash
-cd career-os-backend
-npm install
-```
-
----
-
-## 3. Environment Variables Setup
-
-Copy `.env.example` to `.env`:
-
-```bash
-cp .env.example .env
-```
-
-Then fill in the values. Here is what each one means:
 
 | Variable | What it is | Where to get it |
 |---|---|---|
