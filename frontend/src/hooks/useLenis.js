@@ -7,7 +7,7 @@ export default function useLenis() {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 0.8,
+      duration: 0.4,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       wheelMultiplier: 1,

@@ -29,13 +29,28 @@ function PathCurve() {
 
 function Node({ position, color, scale = 1, speed = 1 }) {
   const ref = useRef();
-  useFrame(({ clock }) => {
+  /*useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.rotation.y = clock.getElapsedTime() * 0.2 * speed;
     }
-  });
+  });*/
+  useFrame(({ clock }) => {
+  const t = clock.getElapsedTime();
+
+  ref.current.rotation.y = t * 0.8 * speed;
+  ref.current.rotation.x = Math.sin(t * speed) * 0.2;
+
+  ref.current.position.y += Math.sin(t * speed * 2) * 0.001;
+});
+
   return (
-    <Float speed={speed} rotationIntensity={0.3} floatIntensity={0.8}>
+  //  <Float speed={speed} rotationIntensity={0.3} floatIntensity={0.8}>
+  <Float
+  speed={2}
+  rotationIntensity={1.5}
+  floatIntensity={2}
+  floatingRange={[-0.4,0.4]}
+>
       <mesh ref={ref} position={position} scale={scale}>
         <icosahedronGeometry args={[0.42, 1]} />
         <meshPhysicalMaterial
@@ -50,6 +65,18 @@ function Node({ position, color, scale = 1, speed = 1 }) {
       </mesh>
     </Float>
   );
+}
+function CameraRig() {
+  useFrame(({ camera, clock }) => {
+    const t = clock.getElapsedTime();
+
+    camera.position.x = Math.sin(t * 0.15) * 0.3;
+    camera.position.y = Math.cos(t * 0.2) * 0.2;
+
+    camera.lookAt(0,0,0);
+  });
+
+  return null;
 }
 
 function Scene() {
@@ -66,6 +93,7 @@ function Scene() {
 
   return (
     <>
+    <CameraRig/>
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} color="#ffffff" />
       <directionalLight position={[-5, -3, -5]} intensity={0.4} color="#A5D8FF" />
@@ -73,7 +101,7 @@ function Scene() {
       {nodes.map((n, i) => (
         <Node key={i} {...n} />
       ))}
-      <Sparkles count={35} scale={12} size={2} speed={0.3} opacity={0.5} color="#5B5FEF" />
+      <Sparkles count={70} scale={12} size={3} speed={0.6} opacity={0.5} color="#5B5FEF" />
       <Environment preset="city" environmentIntensity={0.5} />
     </>
   );
