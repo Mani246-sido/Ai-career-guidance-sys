@@ -48,7 +48,7 @@ export default function Login() {
                   required
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="you@university.edu"
+                  placeholder="your@gmail.com"
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-white border border-[var(--color-line)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-indigo)] transition-shadow"
                 />
               </div>
