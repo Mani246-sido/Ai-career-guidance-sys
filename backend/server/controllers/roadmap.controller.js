@@ -15,19 +15,20 @@ const generateRoadmap = asyncHandler(async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gemini-2.5-flash",
       messages: [
         {
           role: "system",
           content:
-            'Generate a learning roadmap with 5-8 milestones for the given target role. For each milestone, include 1-3 learning resources (course, video, article, documentation, or practice platform). Return strict JSON array: [{ "title": string, "description": string, "durationWeeks": number, "resources": [{ "title": string, "type": "course"|"video"|"article"|"documentation"|"practice", "url": string }] }]. Use real, well known platforms (freeCodeCamp, MDN, official docs, YouTube, Coursera) for urls where possible. No extra text.',
+            'Generate a learning roadmap with 5-8 milestones for the given target role. For each milestone, include 1-3 learning resources (course, video, article, documentation, or practice platform). Return ONLY valid JSON array, no markdown, no code fences: [{ "title": string, "description": string, "durationWeeks": number, "resources": [{ "title": string, "type": "course"|"video"|"article"|"documentation"|"practice", "url": string }] }]. Use real, well known platforms (freeCodeCamp, MDN, official docs, YouTube, Coursera) for urls where possible.',
         },
         { role: "user", content: `Target role: ${targetRole}` },
       ],
     });
 
-    milestones = JSON.parse(completion.choices[0].message.content.trim());
+    milestones = openai.parseAIJSON(completion.choices[0].message.content);
   } catch (error) {
+    console.error("Error generating roadmap:", error.message);
     milestones = [
       {
         title: "Foundations",

@@ -3,12 +3,12 @@ const openai = require("./openai.client");
 const generateTasks = async (role) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash",//"gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            'Generate 5 progressive internship tasks for the given role. Return ONLY valid JSON, no markdown, no code fences: [{ "title": string, "description": string, "order": number }].',
+            'Generate 5 progressive internship tasks for the given role. Return strict JSON array: [{ "title": string, "description": string, "order": number }]. No extra text.',
         },
         {
           role: "user",
@@ -17,10 +17,9 @@ const generateTasks = async (role) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    return openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    return JSON.parse(raw);
   } catch (error) {
-    console.error("Error generating internship tasks:", error.message);
     return [
       { title: "Setup & Planning", description: "Set up your environment and plan the project structure.", order: 1 },
       { title: "Core Implementation", description: "Implement the core feature for this role.", order: 2 },
@@ -34,12 +33,12 @@ const generateTasks = async (role) => {
 const reviewSubmission = async (taskDescription, submissionContent) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            'You are a senior engineer reviewing an intern submission. Return ONLY valid JSON, no markdown, no code fences: { "qualityScore": number 0-100, "securityScore": number 0-100, "performanceScore": number 0-100, "documentationScore": number 0-100, "feedback": string }.',
+            'You are a senior engineer reviewing an intern submission. Return strict JSON: { "qualityScore": number 0-100, "securityScore": number 0-100, "performanceScore": number 0-100, "documentationScore": number 0-100, "feedback": string }. No extra text.',
         },
         {
           role: "user",
@@ -48,10 +47,9 @@ const reviewSubmission = async (taskDescription, submissionContent) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    return openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    return JSON.parse(raw);
   } catch (error) {
-    console.error("Error reviewing submission:", error.message);
     return {
       qualityScore: 65,
       securityScore: 65,

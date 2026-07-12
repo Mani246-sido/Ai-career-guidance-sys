@@ -3,12 +3,12 @@ const openai = require("./openai.client");
 const generateQuestions = async (role) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash",//"gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            "Generate 5 interview questions for the given role, mixing technical and behavioral. Return ONLY valid JSON array of strings, no markdown, no code fences.",
+            'Generate 5 interview questions for the given role, mixing technical and behavioral. Return strict JSON array of strings. No extra text.',
         },
         {
           role: "user",
@@ -17,10 +17,9 @@ const generateQuestions = async (role) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    return openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    return JSON.parse(raw);
   } catch (error) {
-    console.error("Error generating interview questions:", error.message);
     return [
       "Tell me about a challenging project you worked on.",
       "Explain a core concept relevant to this role.",
@@ -34,12 +33,12 @@ const generateQuestions = async (role) => {
 const generateFeedback = async (role, transcript) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            'You are an interview coach. Return ONLY valid JSON, no markdown, no code fences: { "technicalScore": number 0-100, "communicationScore": number 0-100, "confidenceScore": number 0-100, "feedback": string, "improvementRoadmap": string[] }.',
+            'You are an interview coach. Return strict JSON: { "technicalScore": number 0-100, "communicationScore": number 0-100, "confidenceScore": number 0-100, "feedback": string, "improvementRoadmap": string[] }. No extra text.',
         },
         {
           role: "user",
@@ -48,10 +47,9 @@ const generateFeedback = async (role, transcript) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    return openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    return JSON.parse(raw);
   } catch (error) {
-    console.error("Error generating interview feedback:", error.message);
     return {
       technicalScore: 60,
       communicationScore: 60,

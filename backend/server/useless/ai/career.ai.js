@@ -20,12 +20,12 @@ const predictCareer = async (inputs, profile) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash",//"gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            "You are a career advisor AI. Given a student's metrics, return 3 short, specific, actionable insights as a JSON array of strings. Return ONLY valid JSON, no markdown, no code fences, no preamble.",
+            "You are a career advisor AI. Given a student's metrics, return 3 short, specific, actionable insights as a JSON array of strings. No preamble, only JSON array.",
         },
         {
           role: "user",
@@ -36,10 +36,9 @@ const predictCareer = async (inputs, profile) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    aiInsights = openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    aiInsights = JSON.parse(raw);
   } catch (error) {
-    console.error("Error generating career insights:", error.message);
     aiInsights = [
       "Increase weekly DSA practice to improve technical readiness.",
       "Complete at least one more real-world project to strengthen your portfolio.",

@@ -7,10 +7,10 @@ export default function useLenis() {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 0.4,
+      duration: 0.3,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.2,
       touchMultiplier: 1.5,
     });
 

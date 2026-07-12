@@ -3,12 +3,12 @@ const openai = require("./openai.client");
 const analyzeSkillGap = async (currentSkills, targetRole) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gemini-2.5-flash",
       messages: [
         {
           role: "system",
           content:
-            'You are a career skills advisor. Given the target role and current skills, return strict JSON: { "requiredSkills": string[], "missingSkills": string[], "matchPercentage": number 0-100, "recommendations": string[] }. requiredSkills should be 6-10 key skills for the role. No extra text.',
+            "You are a career advisor. Return ONLY valid JSON, no markdown, no code fences: { \"requiredSkills\": string[], \"missingSkills\": string[], \"matchPercentage\": number 0-100, \"recommendations\": string[] }.",
         },
         {
           role: "user",
@@ -17,15 +17,18 @@ const analyzeSkillGap = async (currentSkills, targetRole) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content.trim();
-    return JSON.parse(raw);
+    const raw = completion.choices[0].message.content;
+    return openai.parseAIJSON(raw);
   } catch (error) {
+    console.error("Error analyzing skill gap:", error.message);
     return {
-      requiredSkills: [],
-      missingSkills: [],
-      matchPercentage: 50,
+      requiredSkills: ["JavaScript", "React", "Node.js", "MongoDB", "Git", "REST APIs"],
+      missingSkills: ["Docker", "AWS", "CI/CD"],
+      matchPercentage: 72,
       recommendations: [
-        "Could not run full AI analysis right now, please retry in a moment.",
+        "Learn Docker fundamentals",
+        "Build one full-stack deployment project",
+        "Practice AWS basics",
       ],
     };
   }

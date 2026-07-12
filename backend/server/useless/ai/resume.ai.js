@@ -3,12 +3,12 @@ const openai = require("./openai.client");
 const analyzeResume = async (resumeText, targetRole) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash",//"gpt-4o-mini",
       messages: [
         {
           role: "system",
           content:
-            'You are an ATS resume analyzer. Return ONLY valid JSON, no markdown, no code fences: { "atsScore": number 0-100, "missingSkills": string[], "suggestions": string[] }.',
+            'You are an ATS resume analyzer. Return strict JSON: { "atsScore": number 0-100, "missingSkills": string[], "suggestions": string[] }. No extra text.',
         },
         {
           role: "user",
@@ -17,10 +17,9 @@ const analyzeResume = async (resumeText, targetRole) => {
       ],
     });
 
-    const raw = completion.choices[0].message.content;
-    return openai.parseAIJSON(raw);
+    const raw = completion.choices[0].message.content.trim();
+    return JSON.parse(raw);
   } catch (error) {
-    console.error("Error analyzing resume:", error.message);
     return {
       atsScore: 60,
       missingSkills: ["Could not analyze fully, please retry."],
